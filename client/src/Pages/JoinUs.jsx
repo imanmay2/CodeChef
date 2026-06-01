@@ -84,7 +84,7 @@ const JoinUs = () => {
       if (data.error) {
         setError(true);
       } else {
-        setRecruiting(data[0].recruiting);
+        setRecruiting(data.recruiting || "No");
       }
       setLoading(false);
     };
@@ -142,7 +142,9 @@ const JoinUs = () => {
   const handleFormSubmit = async (formData) => {
     setFormFillLoading(true);
     if (recruiting === "No") {
-      return console.error("Sorry recruitments are currently closed :(");
+      ToastMsg("Sorry recruitments are currently closed :(", "warning");
+      setFormFillLoading(false);
+      return;
     } else {
       try {
         const data = {
