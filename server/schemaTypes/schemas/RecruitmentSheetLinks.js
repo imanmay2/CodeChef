@@ -20,6 +20,76 @@ const RecruitmentSheetLinks = {
       type: 'url',
     },
     {
+      name: 'competitiveProgrammingGoogleSheet',
+      title: 'Competitive Programming Google Sheet Link',
+      type: 'url',
+    },
+    {
+      name: 'competitiveProgrammingSheetBest',
+      title: 'Competitive Programming Sheet.best API Link',
+      type: 'url',
+    },
+    {
+      name: 'designGoogleSheet',
+      title: 'Design Google Sheet Link',
+      type: 'url',
+    },
+    {
+      name: 'designSheetBest',
+      title: 'Design Sheet.best API Link',
+      type: 'url',
+    },
+    {
+      name: 'managementGoogleSheet',
+      title: 'Management Google Sheet Link',
+      type: 'url',
+    },
+    {
+      name: 'managementSheetBest',
+      title: 'Management Sheet.best API Link',
+      type: 'url',
+    },
+    {
+      name: 'marketingOutreachGoogleSheet',
+      title: 'Marketing & Outreach Google Sheet Link',
+      type: 'url',
+    },
+    {
+      name: 'marketingOutreachSheetBest',
+      title: 'Marketing & Outreach Sheet.best API Link',
+      type: 'url',
+    },
+    {
+      name: 'projectsGoogleSheet',
+      title: 'Projects Google Sheet Link',
+      type: 'url',
+    },
+    {
+      name: 'projectsSheetBest',
+      title: 'Projects Sheet.best API Link',
+      type: 'url',
+    },
+    {
+      name: 'socialMediaContentGoogleSheet',
+      title: 'Social Media & Content Google Sheet Link',
+      type: 'url',
+    },
+    {
+      name: 'socialMediaContentSheetBest',
+      title: 'Social Media & Content Sheet.best API Link',
+      type: 'url',
+    },
+    {
+      name: 'webDevelopmentGoogleSheet',
+      title: 'Web Development Google Sheet Link',
+      type: 'url',
+    },
+    {
+      name: 'webDevelopmentSheetBest',
+      title: 'Web Development Sheet.best API Link',
+      type: 'url',
+    },
+    {
       name: 'contactUsGoogleSheet',
       title: 'Contact Us Google Sheet Link',
       type: 'url',

@@ -40,6 +40,38 @@ async function getSheetLinks() {
   }
 }
 
+function getJoinUsSheetBestLink(links, department) {
+  const departmentSheetBestLinks = {
+    competitive_programming: links?.competitiveProgrammingSheetBest,
+    design: links?.designSheetBest,
+    management: links?.managementSheetBest,
+    marketing_and_outreach: links?.marketingOutreachSheetBest,
+    projects: links?.projectsSheetBest,
+    social_media_and_content: links?.socialMediaContentSheetBest,
+    web_development: links?.webDevelopmentSheetBest,
+  };
+
+  return departmentSheetBestLinks[department] || links?.joinUsSheetBest;
+}
+
+function getAllJoinUsSheetBestLinks(links) {
+  const sheetLinks = [
+    links?.competitiveProgrammingSheetBest,
+    links?.designSheetBest,
+    links?.managementSheetBest,
+    links?.marketingOutreachSheetBest,
+    links?.projectsSheetBest,
+    links?.socialMediaContentSheetBest,
+    links?.webDevelopmentSheetBest,
+  ];
+
+  if (!sheetLinks.some(Boolean) && links?.joinUsSheetBest) {
+    sheetLinks.push(links.joinUsSheetBest);
+  }
+
+  return [...new Set(sheetLinks.filter(Boolean))];
+}
+
 // https://docs.sheet.best/#generating-your-rest-api
 // ***************************************************************************
 
@@ -128,7 +160,17 @@ const addJoinUsDataInGoogleSheet = async (req, res) => {
     res.status(500).json({ error: "Error fetching latest links" });
     return;
   }
-  const joinUsGoogleSheetLink = links?.joinUsSheetBest;
+  const joinUsGoogleSheetLink = getJoinUsSheetBestLink(
+    links,
+    data?.department
+  );
+
+  if (!joinUsGoogleSheetLink) {
+    return res.status(400).json({
+      error: "No Join Us Sheet.best API link configured",
+      department: data?.department,
+    });
+  }
 
   fetch(joinUsGoogleSheetLink, {
     method: "POST",
@@ -166,16 +208,27 @@ const readJoinUsDataFromGoogleSheet = async (req, res) => {
   for (let key of keys) {
     whatsAppGroupLinks[key] = links.whatsAppGroupLinks[key].url;
   }
-  const joinUsGoogleSheetLink = links.joinUsSheetBest;
-  fetch(joinUsGoogleSheetLink)
-    .then((response) => response.json())
-    .then((data) => {
-      res.status(200).json(data);
-    })
-    .catch((error) => {
-      console.error("Error reading data:", error);
-      res.status(500).json({ error: "Error reading data" });
-    });
+  const joinUsGoogleSheetLinks = getAllJoinUsSheetBestLinks(links);
+
+  if (!joinUsGoogleSheetLinks.length) {
+    return res
+      .status(400)
+      .json({ error: "No Join Us Sheet.best API links configured" });
+  }
+
+  try {
+    const sheetData = await Promise.all(
+      joinUsGoogleSheetLinks.map(async (joinUsGoogleSheetLink) => {
+        const response = await fetch(joinUsGoogleSheetLink);
+        return response.json();
+      })
+    );
+
+    res.status(200).json(sheetData.flat());
+  } catch (error) {
+    console.error("Error reading data:", error);
+    res.status(500).json({ error: "Error reading data" });
+  }
 };
 
 // API to send email to join our whatsapp group

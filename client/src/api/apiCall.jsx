@@ -110,14 +110,14 @@ export const getAllBlogs = async () => {
 
 // Checking our Recuritement status from sanity backend
 export const areWeRecuriting = async () => {
-  const query = '*[_type == "joinus"]';
+  const query = '*[_type == "joinus"] | order(_updatedAt desc)[0]{recruiting}';
   try {
     const response = await client.fetch(query);
     // console.log(response);
-    return response;
+    return response || { recruiting: "No" };
   } catch (error) {
-    console.log("Error fetching members: ", error);
-    return { error: "Failed to fetch members" };
+    console.log("Error fetching recruitment status: ", error);
+    return { error: "Failed to fetch recruitment status" };
   }
 };
 
@@ -148,6 +148,7 @@ export const addContactUsEmail = async (data) => {
 
 // adding new recruite's data in the join us google sheet
 export const addJoinUsData = async (data) => {
+  console.log("Data being sent to backend: ", data);
   return await commonrequest(
     "POST",
     `${BACKEND_URL}/api/v1/join-us/add/data`,
